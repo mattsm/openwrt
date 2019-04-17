@@ -33,12 +33,10 @@ endef
 
 define Image/BuildKernel
 	cp $(KDIR)/zImage $(BIN_DIR)/$(IMG_PREFIX)-zImage
-	BIN_DIR=$(BIN_DIR) IMG_PREFIX="$(IMG_PREFIX)" $(TOPDIR)/scripts/arm-magic.sh
 endef
 
 define Image/BuildKernel/Initramfs
 	cp $(KDIR)/zImage-initramfs $(BIN_DIR)/$(IMG_PREFIX)-initramfs-zImage
-	BIN_DIR=$(BIN_DIR) IMG_PREFIX="$(IMG_PREFIX)-initramfs" $(TOPDIR)/scripts/arm-magic.sh
 endef
 
 # Build sysupgrade image
@@ -62,15 +60,11 @@ endef
 
 define Image/Build/jffs2-128k
 	dd if=$(KDIR)/root.$(1) of=$(BIN_DIR)/$(IMG_PREFIX)-$(1).img bs=131072 conv=sync
-	$(call Image/Build/Linksys,$(1),nslu2,$(1))
-	$(call Image/Build/Freecom,$(1),fsg3,$(1))
 endef
 
 define Image/Build/squashfs
 	$(call prepare_generic_squashfs,$(KDIR)/root.squashfs)
 	dd if=$(KDIR)/root.$(1) of=$(BIN_DIR)/$(IMG_PREFIX)-$(1).img bs=131072 conv=sync
-	$(call Image/Build/Linksys,$(1),nslu2,$(1))
-	$(call Image/Build/Freecom,$(1),fsg3,$(1))
 endef
 
 $(eval $(call BuildImage))
